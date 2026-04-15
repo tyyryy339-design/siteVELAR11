@@ -13,6 +13,7 @@ const PORT = 3000;
 app.use(cors());
 app.use(bodyParser.json());
 app.use(express.static('uploads'));
+app.use(express.static('.'));
 
 // Папка для загрузки файлов
 const uploadDir = 'uploads';
