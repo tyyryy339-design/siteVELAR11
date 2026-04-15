@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VELAR - Управление машинами с фото</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background: #000;
+            color: #fff;
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            color: #3b82f6;
+            margin-bottom: 30px;
+        }
+        
+        .form-section {
+            background: #1a1a1a;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #3b82f6;
+        }
+        
+        input, textarea {
+            width: 100%;
+            padding: 10px;
+            background: #222;
+            color: #fff;
+            border: 1px solid #333;
+            border-radius: 4px;
+            font-family: Arial, sans-serif;
+        }
+        
+        input:focus, textarea:focus {
+            outline: none;
+            border-color: #3b82f6;
+        }
+        
+        .btn {
+            padding: 12px 24px;
+            background: #3b82f6;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        
+        .btn:hover {
+            background: #2563eb;
+        }
+        
+        .btn-danger {
+            background: #ef4444;
+        }
+        
+        .btn-danger:hover {
+            background: #dc2626;
+        }
+        
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+        
+        .car-card {
+            background: #1a1a1a;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid #333;
+        }
+        
+        .car-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            background: #222;
+        }
+        
+        .car-info {
+            padding: 15px;
+        }
+        
+        .car-name {
+            font-size: 18px;
+            font-weight: bold;
+            color: #3b82f6;
+            margin-bottom: 5px;
+        }
+        
+        .car-year {
+            color: #888;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+        
+        .car-prices {
+            font-size: 12px;
+            color: #bbb;
+            margin-bottom: 10px;
+        }
+        
+        .car-buttons {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .car-buttons button {
+            flex: 1;
+            padding: 8px;
+            font-size: 12px;
+        }
+        
+        .loading {
+            text-align: center;
+            color: #3b82f6;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚗 VELAR - Управление автомобилями с фото</h1>
+        
+        <div class="form-section">
+            <h2 style="margin-bottom: 20px;">Добавить новый автомобиль</h2>
+            <form id="addCarForm">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                    <div class="form-group">
+                        <label>Название</label>
+                        <input type="text" id="carName" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Год</label>
+                        <input type="number" id="carYear" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Эмодзи 🚗</label>
+                        <input type="text" id="carEmoji" value="🚗">
+                    </div>
+                    <div class="form-group">
+                        <label>Фото</label>
+                        <input type="file" id="carImage" accept="image/*">
+                    </div>
+                    <div class="form-group">
+                        <label>Цена 1-2 суток</label>
+                        <input type="number" id="price1_2" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Цена 3-6 суток</label>
+                        <input type="number" id="price3_6" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Цена 7-14 суток</label>
+                        <input type="number" id="price7_14" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Цена 15-24 суток</label>
+                        <input type="number" id="price15_24" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Цена 25+ (месяц)</label>
+                        <input type="number" id="price25_plus" required>
+                    </div>
+                </div>
+                <button type="submit" class="btn">Добавить автомобиль</button>
+            </form>
+        </div>
+        
+        <h2>📊 Все автомобили</h2>
+        <div id="carsList" class="grid"></div>
+    </div>
+
+    <script>
+        const API_URL = 'http://localhost:3000/api';
+
+        // Загрузить все автомобили
+        async function loadCars() {
+            try {
+                const response = await fetch(`${API_URL}/cars`);
+                const cars = await response.json();
+                displayCars(cars);
+            } catch (error) {
+                console.error('Ошибка загрузки:', error);
+                document.getElementById('carsList').innerHTML = '<p class="loading">Убедитесь, что backend запущен на http://localhost:3000</p>';
+            }
+        }
+
+        // Отобразить автомобили
+        function displayCars(cars) {
+            const list = document.getElementById('carsList');
+            list.innerHTML = '';
+
+            if (cars.length === 0) {
+                list.innerHTML = '<p class="loading">Нет автомобилей. Добавьте первый!</p>';
+                return;
+            }
+
+            cars.forEach(car => {
+                const card = document.createElement('div');
+                card.className = 'car-card';
+                card.innerHTML = `
+                    <img src="${car.image_url || 'https://via.placeholder.com/250x200?text=No+Image'}" alt="${car.name}" class="car-image">
+                    <div class="car-info">
+                        <div class="car-name">${car.emoji} ${car.name}</div>
+                        <div class="car-year">${car.year} год</div>
+                        <div class="car-prices">
+                            <p>1-2 суток: ${car.price_1_2?.toLocaleString()}₸</p>
+                            <p>3-6 суток: ${car.price_3_6?.toLocaleString()}₸</p>
+                            <p>7-14 суток: ${car.price_7_14?.toLocaleString()}₸</p>
+                        </div>
+                        <div class="car-buttons">
+                            <button class="btn" onclick="editCar(${car.id})">✏️ Редактировать</button>
+                            <button class="btn btn-danger" onclick="deleteCar(${car.id})">🗑️ Удалить</button>
+                        </div>
+                    </div>
+                `;
+                list.appendChild(card);
+            });
+        }
+
+        // Добавить автомобиль
+        document.getElementById('addCarForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const formData = new FormData();
+            formData.append('name', document.getElementById('carName').value);
+            formData.append('year', document.getElementById('carYear').value);
+            formData.append('emoji', document.getElementById('carEmoji').value);
+            formData.append('price_1_2', document.getElementById('price1_2').value);
+            formData.append('price_3_6', document.getElementById('price3_6').value);
+            formData.append('price_7_14', document.getElementById('price7_14').value);
+            formData.append('price_15_24', document.getElementById('price15_24').value);
+            formData.append('price_25_plus', document.getElementById('price25_plus').value);
+            formData.append('image', document.getElementById('carImage').files[0]);
+
+            try {
+                const response = await fetch(`${API_URL}/cars`, {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (response.ok) {
+                    alert('Автомобиль добавлен!');
+                    document.getElementById('addCarForm').reset();
+                    loadCars();
+                }
+            } catch (error) {
+                alert('Ошибка: ' + error.message);
+            }
+        });
+
+        // Удалить автомобиль
+        async function deleteCar(id) {
+            if (!confirm('Удалить автомобиль?')) return;
+
+            try {
+                const response = await fetch(`${API_URL}/cars/${id}`, {
+                    method: 'DELETE'
+                });
+
+                if (response.ok) {
+                    loadCars();
+                }
+            } catch (error) {
+                alert('Ошибка: ' + error.message);
+            }
+        }
+
+        function editCar(id) {
+            alert('Редактирование пока не реализовано');
+        }
+
+        // Загрузить при открытии
+        loadCars();
+    </script>
+</body>
+</html>

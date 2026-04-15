@@ -1,0 +1,154 @@
+﻿<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VELAR - Аренда автомобилей</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Место для логотипа -->
+    <section class="logo-section">
+        <img src="photo_2026-04-14_23-14-56.jpg" alt="Логотип" class="logo-img">
+    </section>
+
+    <!-- Шапка сайта -->
+    <header class="header">
+        <div class="container">
+            <div class="header-inner">
+                <nav class="nav">
+                    <a href="#cars">Машины</a>
+                    <a href="#places">Места</a>
+                    <a href="#footer">Контакты</a>
+                </nav>
+                <a href="tel:+48515919678" class="phone-link">+48 515 919 678</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Промо баннер - добавлено место -->
+    <section class="hero" style="background: transparent; padding: 80px 20px;"></section>
+
+    <!-- Категории -->
+    <section class="categories-section">
+        <div class="container">
+            <h2>Для чего Вам автомобиль?</h2>
+            <div class="categories-list">
+                <div class="category-item">
+                    <div class="cat-icon">🏙️</div>
+                    <span>Для города</span>
+                </div>
+                <div class="category-item">
+                    <div class="cat-icon">🚗</div>
+                    <span>Для загородных поездок</span>
+                </div>
+                <div class="category-item">
+                    <div class="cat-icon">✈️</div>
+                    <span>Для туризма</span>
+                </div>
+                <div class="category-item">
+                    <div class="cat-icon">🎉</div>
+                    <span>Для встречи мероприятий</span>
+                </div>
+                <div class="category-item">
+                    <div class="cat-icon">⚡</div>
+                    <span>Электро</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Каталог машин -->
+    <section class="cars" id="cars">
+        <div class="container">
+            <h2>Наши автомобили</h2>
+            
+            <div class="filters-row">
+                <input type="text" id="searchInput" placeholder="Поиск..." class="input-search">
+                <select id="filterPrice" class="select-filter">
+                    <option value="">Все цены</option>
+                    <option value="cheap">До 30.000₸</option>
+                    <option value="mid">30-50.000₸</option>
+                    <option value="premium">От 50.000₸</option>
+                </select>
+            </div>
+
+            <div class="grid-cars" id="carsList"></div>
+
+            <div class="load-section">
+                <button class="btn btn-load" onclick="loadMore()">Загрузить еще</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Туристические места -->
+    <section class="places" id="places">
+        <div class="container">
+            <h2>Куда поехать на машине?</h2>
+            <p class="places-subtitle">Самые красивые места Алматы и Алматинской области, куда можно доехать на машине</p>
+            
+            <div class="places-list">
+                <div class="place-item">
+                    <div class="place-icon">🏔️</div>
+                    <h3>Высокогорный каток Медео</h3>
+                    <p>Идеальное место для зимнего отдыха рядом с Алматы</p>
+                    <a href="#">Узнать подробнее</a>
+                </div>
+                <div class="place-item">
+                    <div class="place-icon">🏞️</div>
+                    <h3>Бутаковское ущелье</h3>
+                    <p>Живописное место для прогулок и пикников</p>
+                    <a href="#">Узнать подробнее</a>
+                </div>
+                <div class="place-item">
+                    <div class="place-icon">💎</div>
+                    <h3>Большое Алматинское озеро</h3>
+                    <p>Красивейшее озеро с прозрачной водой</p>
+                    <a href="#">Узнать подробнее</a>
+                </div>
+                <div class="place-item">
+                    <div class="place-icon">🏜️</div>
+                    <h3>Ущелье Чарын</h3>
+                    <p>Величественный красный каньон с красивыми видами</p>
+                    <a href="#">Узнать подробнее</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Подвал -->
+    <footer class="footer" id="footer">
+        <div class="container">
+            <h2>Контакты</h2>
+            
+            <div class="footer-grid">
+                <div class="footer-item">
+                    <h3>Телефон</h3>
+                    <p><a href="tel:+48515919678">+48 515 919 678</a></p>
+                </div>
+                <div class="footer-item">
+                    <h3>Email</h3>
+                    <p><a href="mailto:info@velar.kz">info@velar.kz</a></p>
+                </div>
+                <div class="footer-item">
+                    <h3>Адрес</h3>
+                    <p>Алматы, ул. Абая, 44/2</p>
+                </div>
+            </div>
+
+            <div class="social-row">
+                <a href="https://wa.me/48515919678" target="_blank">WhatsApp</a>
+                <a href="https://t.me/tgh469" target="_blank">Telegram</a>
+                <a href="https://instagram.com" target="_blank">Instagram</a>
+                <a href="viber://chat?number=%2B48515919678">Viber</a>
+            </div>
+
+            <div class="footer-copy">
+                <p>&copy; 2026 VELAR. Все права защищены.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
